@@ -1,0 +1,13 @@
+name: kubekick
+version: 0.1.0
+
+authors:
+  - Ray Zane <ray@promptworks.com>
+
+targets:
+  kubekick:
+    main: src/kubekick/cli.cr
+
+crystal: 0.22.0
+
+license: MIT
