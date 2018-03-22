@@ -1,4 +1,3 @@
-require "../definition"
 require "../kubectl"
 
 module Kubekick

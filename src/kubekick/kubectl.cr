@@ -38,6 +38,16 @@ module Kubekick
       raise Error.new(error.to_s) unless status.success?
     end
 
+    def get_secrets(name : String)
+      status, output, error = run(["get", "secret", name, "-o", "yaml"])
+
+      if status.success?
+        Secret.new(output.to_s)
+      else
+        raise Error.new(error.to_s)
+      end
+    end
+
     def run(args)
       output = IO::Memory.new
       error = IO::Memory.new
