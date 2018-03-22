@@ -1,5 +1,9 @@
 version: 1.0
 shards:
+  cox:
+    github: andrewhamon/cox
+    commit: 8346d47bc11c88c61d150372f59921fb50c84d1d
+
   minitest:
     github: ysbaddaden/minitest.cr
     version: 0.3.6

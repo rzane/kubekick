@@ -8,6 +8,10 @@ targets:
   kubekick:
     main: src/kubekick/cli.cr
 
+dependencies:
+  cox:
+    github: andrewhamon/cox
+
 development_dependencies:
   minitest:
     github: ysbaddaden/minitest.cr
