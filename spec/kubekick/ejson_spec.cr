@@ -13,7 +13,7 @@ describe Kubekick::EJSON do
   end
 
   let :box do
-    Crypto.encrypt("foobar", public, secret)
+    EJSON::Crypto.encrypt("foobar", public, secret)
   end
 
   let :shallow do

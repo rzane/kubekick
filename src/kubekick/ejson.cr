@@ -1,5 +1,6 @@
 require "json"
-require "./crypto"
+require "./ejson/crypto"
+require "./ejson/walk"
 
 module Kubekick
   module EJSON
@@ -8,41 +9,13 @@ module Kubekick
 
     def self.decrypt(data, secret)
       encrypted = JSON.parse_raw(data)
-      decrypted = walk(encrypted, secret)
+      decrypted = Walk.walk(encrypted, secret)
       JSON::Any.new(decrypted)
     end
 
     def self.public_key(data)
       encrypted = JSON.parse(data)
       encrypted["_public_key"].as_s
-    end
-
-    def self.walk(data : Hash(String, JSON::Type), secret)
-      result = {} of String => JSON::Type
-
-      data.each do |key, value|
-        if value.is_a?(String) && !key.starts_with?("_")
-          result[key] = Crypto.decrypt(value, secret)
-        else
-          result[key] = walk(value, secret)
-        end
-      end
-
-      result
-    end
-
-    def self.walk(data : Array(JSON::Type), secret)
-      result = [] of JSON::Type
-
-      data.each do |item|
-        result << walk(item, secret)
-      end
-
-      result
-    end
-
-    def self.walk(data, _secret)
-      data
     end
   end
 end

@@ -1,8 +1,8 @@
 require "minitest/autorun"
-require "../../src/kubekick/crypto"
+require "../../../src/kubekick/ejson/crypto"
 
-describe Kubekick::Crypto do
-  include Kubekick
+describe Kubekick::EJSON::Crypto do
+  include Kubekick::EJSON
 
   let :public do
     "870c8b7867009b93652549c4144cd425bd03043a36e207cce13411d260385732"
