@@ -12,6 +12,11 @@ module Kubekick
       JSON::Any.new(decrypted)
     end
 
+    def self.public_key(data)
+      encrypted = JSON.parse(data)
+      encrypted["_public_key"].as_s
+    end
+
     def self.walk(data : Hash(String, JSON::Type), secret)
       result = {} of String => JSON::Type
 
