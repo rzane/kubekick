@@ -1,39 +1,61 @@
-require "./definition"
+require "clim"
 require "./kubectl"
 
 module Kubekick
-  struct CLI
-    def run
-      definition = Definition.new(ARGF.gets_to_end)
+  class CLI < Clim
+    main_command do
+      desc "A sidekick for Kubernetes deployments"
+      usage "kubekick [command] [arguments]"
+      version "Version 0.1.0"
+      run do |options, _arguments|
+        puts options.help
+      end
 
-      kubectl = Kubectl.new
-      kubectl.create_pod(definition.dump)
+      sub_command "run" do
+        desc "Run a one-off task in a bare pod"
+        usage <<-USAGE
+        Run a YAML file:
 
-      loop do
-        pod = kubectl.get_pod(definition.name)
+              kubekick run -f path/to/file.yaml
 
-        case pod.phase
-        when .pending?
-          puts %(pod "#{pod.name}" pending)
-        when .running?
-          puts %(pod "#{pod.name}" running)
-        when .succeeded?
-          puts %(pod "#{pod.name}" succeeded)
-          kubectl.delete_pod(pod.name)
-          puts %(pod "#{pod.name}" deleted)
-          exit 0
-        when .failed?
-          puts %(pod "#{pod.name}" failed)
-          exit 1
-        when .unknown?
-          puts %(pod "#{pod.name}" unknown)
-          exit 1
+            Alternatively, you can pipe the YAML in:
+
+              cat path/to/file.yaml | kubectl run -f -
+        USAGE
+
+        option "-f FILE", "--filename FILE",
+          type: String,
+          desc: "Filename to use to create the resource",
+          required: true
+
+        option "-n NAMESPACE", "--namespace NAMESPACE",
+          type: String,
+          desc: "The namespace scope"
+
+        option "--context CONTEXT",
+          type: String,
+          desc: "The name of the kubeconfig context"
+
+        option "--kubeconfig KUBECONFIG",
+          type: String,
+          desc: "Path to the kubeconfig file"
+
+        run do |options, arguments|
+          cmd = CLI::Run.new(
+            filename: options.filename.not_nil!,
+            kubectl: Kubectl.new(
+              context: options.context,
+              namespace: options.namespace,
+              kubeconfig: options.kubeconfig
+            )
+          )
+
+          cmd.run
         end
-
-        sleep 1
       end
     end
   end
 end
 
-Kubekick::CLI.new.run
+require "./cli/run"
+Kubekick::CLI.start(ARGV)

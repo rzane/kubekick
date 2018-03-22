@@ -11,6 +11,9 @@ targets:
 dependencies:
   cox:
     github: andrewhamon/cox
+  clim:
+    github: at-grandpa/clim
+    version: 0.2.1
 
 development_dependencies:
   minitest:

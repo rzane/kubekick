@@ -8,8 +8,15 @@ module Kubekick
     class Error < Exception
     end
 
+    def initialize(context = nil, namespace = nil, kubeconfig = nil)
+      @flags = [] of String
+      @flags << "--context" << context unless context.nil?
+      @flags << "--namespace" << namespace unless namespace.nil?
+      @flags << "--kubeconfig" << kubeconfig unless kubeconfig.nil?
+    end
+
     def create_pod(template : String)
-      Process.run(CMD, ["create", "-f", "-"]) do |process|
+      Process.run(CMD, @flags + ["create", "-f", "-"]) do |process|
         process.input.puts(template)
       end
     end
@@ -32,7 +39,7 @@ module Kubekick
     def run(args)
       output = IO::Memory.new
       error = IO::Memory.new
-      status = Process.run(CMD, args, output: output, error: error)
+      status = Process.run(CMD, @flags + args, output: output, error: error)
       {status, output, error}
     end
   end
