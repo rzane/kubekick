@@ -53,9 +53,53 @@ module Kubekick
           cmd.run
         end
       end
+
+      sub_command "secrets" do
+        desc "Synchronize a secrets file with Kubernetes"
+        usage <<-USAGE
+        Load a JSON file:
+
+              kubekick secrets -f path/to/file.json
+
+            Alternatively, you can pipe the JSON in:
+
+              cat path/to/secrets.json | kubekick secrets -f -
+        USAGE
+
+        option "-f FILE", "--filename FILE",
+          type: String,
+          desc: "Filename containing secrets",
+          required: true
+
+        option "-n NAMESPACE", "--namespace NAMESPACE",
+          type: String,
+          desc: "The namespace scope"
+
+        option "--context CONTEXT",
+          type: String,
+          desc: "The name of the kubeconfig context"
+
+        option "--kubeconfig KUBECONFIG",
+          type: String,
+          desc: "Path to the kubeconfig file"
+
+        run do |options, arguments|
+          cmd = CLI::Secrets.new(
+            filename: options.filename.not_nil!,
+            kubectl: Kubectl.new(
+              context: options.context,
+              namespace: options.namespace,
+              kubeconfig: options.kubeconfig
+            )
+          )
+
+          cmd.run
+        end
+      end
     end
   end
 end
 
 require "./cli/run"
+require "./cli/secrets"
 Kubekick::CLI.start(ARGV)
