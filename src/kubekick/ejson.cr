@@ -9,7 +9,11 @@ module Kubekick
 
     def self.decrypt(data, secret)
       encrypted = JSON.parse_raw(data)
-      decrypted = Walk.walk(encrypted, secret)
+
+      decrypted = Walk.walk(encrypted) do |value|
+        Crypto.decrypt(value, secret)
+      end
+
       JSON::Any.new(decrypted)
     end
 
