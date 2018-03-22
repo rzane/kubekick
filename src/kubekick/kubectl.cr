@@ -1,7 +1,9 @@
-require "./pod"
+require "./kubectl/pod"
+require "./kubectl/secret"
+require "./kubectl/definition"
 
 module Kubekick
-  struct Kubectl
+  class Kubectl
     CMD = "kubectl"
     INHERIT = Process::Redirect::Inherit
 
@@ -22,10 +24,10 @@ module Kubekick
     end
 
     def get_pod(name : String)
-      status, output, error = run(["get", "pod", name, "-o", "yaml"])
+      status, output, error = run(["get", "pod", name, "-o", "json"])
 
       if status.success?
-        Pod.from_yaml(output.to_s)
+        Pod.new(output.to_s)
       else
         raise Error.new(error.to_s)
       end
