@@ -20,7 +20,7 @@ module Kubekick
       end
 
       def phase
-        @data["status"]["phase"].as_s
+        Phase.parse @data["status"]["phase"].as_s
       end
     end
   end

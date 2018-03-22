@@ -1,3 +1,4 @@
+require "json"
 require "yaml"
 require "uuid"
 
@@ -6,20 +7,20 @@ module Kubekick
     class Definition
       getter! uuid : String
 
-      def initialize(content : String)
-        @definition = YAML.parse(content)
+      def initialize(data : String)
         @uuid = UUID.random.to_s
+        @data = YAML.parse(data)
       end
 
       def name
-        %(#{@definition["metadata"]["name"].as_s}-#{@uuid})
+        %(#{@data["metadata"]["name"].as_s}-#{@uuid})
       end
 
       def dump
-        meta = @definition["metadata"].as_h
+        meta = @data["metadata"].as_h
         meta = meta.merge({"name" => name})
 
-        data = @definition.as_h
+        data = @data.as_h
         data = data.merge({"metadata" => meta})
 
         YAML.dump(data)
