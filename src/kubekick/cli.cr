@@ -1,6 +1,5 @@
 require "./definition"
 require "./kubectl"
-require "./pod"
 
 module Kubekick
   struct CLI
@@ -8,10 +7,10 @@ module Kubekick
       definition = Definition.new(ARGF.gets_to_end)
 
       kubectl = Kubectl.new
-      kubectl.create(definition.dump)
+      kubectl.create_pod(definition.dump)
 
       loop do
-        pod = kubectl.get(Pod, definition.name)
+        pod = kubectl.get_pod(definition.name)
 
         case pod.phase
         when .pending?
@@ -20,6 +19,8 @@ module Kubekick
           puts %(pod "#{pod.name}" running)
         when .succeeded?
           puts %(pod "#{pod.name}" succeeded)
+          kubectl.delete_pod(pod.name)
+          puts %(pod "#{pod.name}" deleted)
           exit 0
         when .failed?
           puts %(pod "#{pod.name}" failed)

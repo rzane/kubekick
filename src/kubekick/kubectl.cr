@@ -1,3 +1,5 @@
+require "./pod"
+
 module Kubekick
   struct Kubectl
     INHERIT = Process::Redirect::Inherit
@@ -7,30 +9,25 @@ module Kubekick
     class Error < Exception
     end
 
-    def create(template : String)
+    def create_pod(template : String)
       Process.run(CMD, ["create", "-f", "-"]) do |process|
         process.input.puts(template)
       end
     end
 
-    def get(resource, name : String)
-      status, output, error = run(["get", resource.kind, name, "-o", "yaml"])
+    def get_pod(name : String)
+      status, output, error = run(["get", "pod", name, "-o", "yaml"])
 
       if status.success?
-        resource.from_yaml(output.to_s)
+        Pod.from_yaml(output.to_s)
       else
         raise Error.new(error.to_s)
       end
     end
 
-    def logs(name : String)
-      status, output, error = run(["logs", name])
-
-      if status.success?
-        output.to_s
-      else
-        raise Error.new(error.to_s)
-      end
+    def delete_pod(name : String)
+      status, _, error = run(["delete", "pod", name])
+      raise Error.new(error.to_s) unless status.success?
     end
 
     def run(args)

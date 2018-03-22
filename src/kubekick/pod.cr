@@ -10,10 +10,6 @@ module Kubekick
       Unknown
     end
 
-    def self.kind
-      "pod"
-    end
-
     def self.from_yaml(value)
       data = YAML.parse(value)
       name = data["metadata"]["name"].as_s
