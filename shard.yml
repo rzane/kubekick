@@ -8,6 +8,10 @@ targets:
   kubekick:
     main: src/kubekick/cli.cr
 
+development_dependencies:
+  minitest:
+    github: ysbaddaden/minitest.cr
+
 crystal: 0.24.2
 
 license: MIT

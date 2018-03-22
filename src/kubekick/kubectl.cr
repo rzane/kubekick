@@ -2,9 +2,8 @@ require "./pod"
 
 module Kubekick
   struct Kubectl
-    INHERIT = Process::Redirect::Inherit
-
     CMD = "kubectl"
+    INHERIT = Process::Redirect::Inherit
 
     class Error < Exception
     end
