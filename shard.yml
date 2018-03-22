@@ -8,6 +8,6 @@ targets:
   kubekick:
     main: src/kubekick/cli.cr
 
-crystal: 0.22.0
+crystal: 0.24.2
 
 license: MIT
