@@ -1,10 +1,10 @@
-require "json"
+require "yaml"
 
 module Kubekick
   class Kubectl
     class Secret
       def initialize(data : String)
-        @data = JSON.parse(data)
+        @data = YAML.parse(data)
       end
 
       def value_of(key : String)

@@ -24,7 +24,7 @@ module Kubekick
     end
 
     def get_pod(name : String)
-      status, output, error = run(["get", "pod", name, "-o", "json"])
+      status, output, error = run(["get", "pod", name, "-o", "yaml"])
 
       if status.success?
         Pod.new(output.to_s)

@@ -1,4 +1,4 @@
-require "json"
+require "yaml"
 
 module Kubekick
   class Kubectl
@@ -12,7 +12,7 @@ module Kubekick
       end
 
       def initialize(data : String)
-        @data = JSON.parse(data)
+        @data = YAML.parse(data)
       end
 
       def name
