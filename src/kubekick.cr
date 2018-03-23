@@ -1,5 +1,7 @@
-require "./kubekick/*"
+require "./kubekick/ejson"
+require "./kubekick/kubectl"
+require "./kubekick/secret_file"
+require "./kubekick/version"
 
 module Kubekick
-  # TODO Put your code here
 end
