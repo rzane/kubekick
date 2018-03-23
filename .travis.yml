@@ -1,6 +1,4 @@
 language: crystal
 
-addons:
-  apt:
-    packages:
-    - libsodium-dev
+before_script:
+  - ./travis-install-sodium.sh
