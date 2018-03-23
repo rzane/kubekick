@@ -1,4 +1,5 @@
 require "yaml"
+require "base64"
 
 module Kubekick
   class Kubectl
@@ -8,7 +9,7 @@ module Kubekick
       end
 
       def value_of(key : String)
-        @data["data"][key].as_s
+        Base64.decode_string(@data["data"][key].as_s)
       end
     end
   end

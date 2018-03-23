@@ -1,7 +1,7 @@
 require "minitest/autorun"
 require "../../../src/kubekick/kubectl/pod"
 
-describe Kubekick::Pod do
+describe Kubekick::Kubectl::Pod do
   include Kubekick
 
   let :json do

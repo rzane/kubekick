@@ -11,7 +11,7 @@ module Kubekick
 
       def run
         definition = Kubectl::Definition.new(read_template)
-        kubectl.create_pod(definition.dump)
+        kubectl.create(definition.dump)
 
         loop do
           pod = kubectl.get_pod(definition.name)

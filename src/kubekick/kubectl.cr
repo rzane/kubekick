@@ -17,10 +17,12 @@ module Kubekick
       @flags << "--kubeconfig" << kubeconfig unless kubeconfig.nil?
     end
 
-    def create_pod(template : String)
-      Process.run(CMD, @flags + ["create", "-f", "-"]) do |process|
-        process.input.puts(template)
-      end
+    def apply(template : String)
+      run_template("create", template)
+    end
+
+    def create(template : String)
+      run_template("apply", template)
     end
 
     def get_pod(name : String)
@@ -48,11 +50,17 @@ module Kubekick
       end
     end
 
-    def run(args)
+    private def run(args)
       output = IO::Memory.new
       error = IO::Memory.new
       status = Process.run(CMD, @flags + args, output: output, error: error)
       {status, output, error}
+    end
+
+    private def run_template(action, template)
+      Process.run(CMD, @flags + [action, "-f", "-"]) do |process|
+        process.input.puts(template)
+      end
     end
   end
 end

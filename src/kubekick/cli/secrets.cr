@@ -1,5 +1,4 @@
-require "base64"
-require "../ejson"
+require "../secret_file"
 require "../kubectl"
 
 module Kubekick
@@ -15,15 +14,31 @@ module Kubekick
 
       def run
         ejson = read_ejson_file()
-        secret = load_ejson_secret(ejson)
-        puts EJSON.decrypt(ejson, secret)
+        secret_key = load_ejson_secret(ejson)
+        secret_file = SecretFile.decrypt(ejson, secret_key)
+
+        secret_file.render_each do |name, yaml|
+          if secret_exists?(name)
+            kubectl.apply(yaml)
+            puts %(secret "#{name}" updated)
+          else
+            kubectl.apply(yaml)
+            puts %(secret "#{name}" created)
+          end
+        end
+      end
+
+      private def secret_exists?(name)
+        kubectl.get_secrets(name)
+        true
+      rescue Kubectl::Error
+        false
       end
 
       private def load_ejson_secret(ejson)
         public_key = EJSON.public_key(ejson)
         secrets = kubectl.get_secrets(SECRET_NAME)
-        encoded = secrets.value_of(public_key)
-        Base64.decode_string(encoded)
+        secrets.value_of(public_key)
       end
 
       private def read_ejson_file
