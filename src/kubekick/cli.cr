@@ -17,13 +17,19 @@ module Kubekick
 
         option "-f FILE", "--filename FILE",
           type: String,
-          desc: "Template file"
+          desc: "Template file",
+          required: true
+
+        option "--from FILE",
+          type: Array(String),
+          desc: "Path to a YAML/JSON file containing parameters",
+          default: [] of String
 
         run do |options, arguments|
-          puts arguments.inspect
-
           cmd = CLI::Template.new(
-            filename: options.filename.not_nil!
+            filename: options.filename.not_nil!,
+            from: options.from,
+            parameters: arguments
           )
 
           cmd.run
