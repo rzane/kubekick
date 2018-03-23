@@ -8,6 +8,10 @@ shards:
     github: andrewhamon/cox
     commit: 8346d47bc11c88c61d150372f59921fb50c84d1d
 
+  crustache:
+    github: MakeNowJust/crustache
+    version: 2.4.0
+
   minitest:
     github: ysbaddaden/minitest.cr
     version: 0.3.6

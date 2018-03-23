@@ -11,6 +11,8 @@ targets:
 dependencies:
   cox:
     github: andrewhamon/cox
+  crustache:
+    github: MakeNowJust/crustache
   clim:
     github: at-grandpa/clim
     version: 0.2.1

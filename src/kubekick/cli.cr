@@ -12,6 +12,24 @@ module Kubekick
         puts options.help
       end
 
+      sub_command "template" do
+        desc "Convert a template"
+
+        option "-f FILE", "--filename FILE",
+          type: String,
+          desc: "Template file"
+
+        run do |options, arguments|
+          puts arguments.inspect
+
+          cmd = CLI::Template.new(
+            filename: options.filename.not_nil!
+          )
+
+          cmd.run
+        end
+      end
+
       sub_command "run" do
         desc "Run a one-off task in a bare pod"
         usage <<-USAGE
@@ -103,3 +121,4 @@ end
 
 require "./cli/run"
 require "./cli/secrets"
+require "./cli/template"
