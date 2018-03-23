@@ -1,8 +1,5 @@
 language: crystal
 
-before_script:
-  - ./travis-install-sodium.sh
-
 addons:
   apt:
     sources:
