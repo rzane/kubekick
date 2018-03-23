@@ -5,12 +5,12 @@ class Kubekick < Formula
   sha256 "ed33da4366c64fee548b3f32f1217294ad617004578ddd5d843a8a5c3cefde2e"
   head "https://gitlab.com/rzane/kubekick.git"
 
-  depends_on "crystal-lang" => :build
+  depends_on "crystal-lang" #=> :build
   depends_on "libsodium"
 
   def install
     system "make"
-    prefix.install "bin/kubekick"
+    bin.install "bin/kubekick"
   end
 
   test do
