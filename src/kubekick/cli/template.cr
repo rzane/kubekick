@@ -1,9 +1,12 @@
 require "yaml"
 require "crustache"
+require "./helpers"
 
 module Kubekick
   class CLI
     class Template
+      include Helpers
+
       getter! filename : String
       getter! parameters : Array(String)
       getter! from : Array(String)
@@ -25,16 +28,9 @@ module Kubekick
           values[key] = value
         end
 
-        template = Crustache.parse(read_file)
-        puts Crustache.render(template, values)
-      end
-
-      private def read_file
-        if filename == "-"
-          STDIN.gets_to_end
-        else
-          File.read(filename)
-        end
+        template = read_template(filename)
+        template = Crustache.parse(template)
+        say Crustache.render(template, values)
       end
     end
   end

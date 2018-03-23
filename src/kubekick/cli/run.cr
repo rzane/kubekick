@@ -1,8 +1,11 @@
 require "../kubectl"
+require "./helpers"
 
 module Kubekick
   class CLI
     class Run
+      include Helpers
+
       getter! kubectl : Kubectl
       getter! filename : String
 
@@ -10,7 +13,8 @@ module Kubekick
       end
 
       def run
-        definition = Kubectl::Definition.new(read_template)
+        template = read_template(filename)
+        definition = Kubectl::Definition.new(template)
         kubectl.create(definition.name, definition.dump)
 
         loop do
@@ -25,28 +29,20 @@ module Kubekick
       private def print_pod_status(pod)
         case pod.phase
         when .pending?
-          puts %(pod "#{pod.name}" pending)
+          say %(pod "#{pod.name}" pending)
         when .running?
-          puts %(pod "#{pod.name}" running)
+          say %(pod "#{pod.name}" running)
         when .succeeded?
-          puts %(pod "#{pod.name}" succeeded)
+          say %(pod "#{pod.name}" succeeded)
           kubectl.delete_pod(pod.name)
-          puts %(pod "#{pod.name}" deleted)
+          say %(pod "#{pod.name}" deleted)
           exit 0
         when .failed?
-          puts %(pod "#{pod.name}" failed)
+          say %(pod "#{pod.name}" failed)
           exit 1
         when .unknown?
-          puts %(pod "#{pod.name}" unknown)
+          say %(pod "#{pod.name}" unknown)
           exit 1
-        end
-      end
-
-      private def read_template
-        if filename == "-"
-          STDIN.gets_to_end
-        else
-          File.read(filename)
         end
       end
     end

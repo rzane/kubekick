@@ -1,9 +1,12 @@
 require "../secret_file"
 require "../kubectl"
+require "./helpers"
 
 module Kubekick
   class CLI
     class Secrets
+      include Helpers
+
       SECRET_NAME = "ejson-keys"
 
       getter! kubectl : Kubectl
@@ -13,12 +16,12 @@ module Kubekick
       end
 
       def run
-        ejson = read_ejson_file()
+        ejson = read_template(filename)
         secret_key = load_ejson_secret(ejson)
         secret_file = SecretFile.decrypt(ejson, secret_key)
 
         secret_file.secrets.each do |name|
-          puts kubectl.apply(name, secret_file.yaml_for(name))
+          say kubectl.apply(name, secret_file.yaml_for(name))
         end
       rescue err : Kubectl::Error
         abort err.message
@@ -35,14 +38,6 @@ module Kubekick
         public_key = EJSON.public_key(ejson)
         secrets = kubectl.get_secrets(SECRET_NAME)
         secrets.value_of(public_key)
-      end
-
-      private def read_ejson_file
-        if filename == "-"
-          STDIN.gets_to_end
-        else
-          File.read(filename)
-        end
       end
     end
   end
