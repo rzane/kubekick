@@ -1,4 +1,4 @@
-# kubekick
+# kubekick [![Build Status](https://travis-ci.org/rzane/kubekick.svg?branch=master)](https://travis-ci.org/rzane/kubekick)
 
 A companion tool for doing deployments with Kubernetes.
 
