@@ -1,12 +1,13 @@
 require "clim"
 require "./kubectl"
+require "./version"
 
 module Kubekick
   class CLI < Clim
     main_command do
       desc "A sidekick for Kubernetes deployments"
       usage "kubekick [command] [arguments]"
-      version "Version 0.1.0"
+      version Kubekick::VERSION
       run do |options, _arguments|
         puts options.help
       end
