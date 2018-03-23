@@ -31,8 +31,8 @@ describe Kubekick::SecretFile do
       labels:
         name: secrets
     data:
-      kubekick: foobar
-      ignored: crackers
+      kubekick: #{Base64.strict_encode("foobar")}
+      not-encrypted: #{Base64.strict_encode("crackers")}
 
     YAML
   end
