@@ -3,7 +3,7 @@ require "logger"
 module Kubekick
   class CLI
     module Helpers
-      property output : IO::FileDescriptor = STDOUT
+      property output : IO = STDOUT
 
       def say(message)
         output.puts message

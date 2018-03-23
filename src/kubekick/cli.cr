@@ -132,7 +132,7 @@ module Kubekick
             )
           )
 
-          cmd.run
+          exit cmd.run
         end
       end
     end
