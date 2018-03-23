@@ -5,11 +5,11 @@ describe Kubekick::SecretFile do
   include Kubekick
 
   let :private_key do
-    File.read_lines("examples/private.key").last.strip.as(String)
+    File.read_lines("examples/secrets/private.key").last.strip.as(String)
   end
 
   let :data do
-    File.read("examples/secrets.ejson")
+    File.read("examples/secrets/secrets.ejson")
   end
 
   let :file do
