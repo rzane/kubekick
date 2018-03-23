@@ -24,7 +24,7 @@ module Kubekick
         end
 
         parameters.each do |parameter|
-          key, value = parameter.split(":", 2)
+          key, value = parameter.split("=", 2)
           values[key] = value
         end
 

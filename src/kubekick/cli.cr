@@ -13,7 +13,21 @@ module Kubekick
       end
 
       sub_command "template" do
-        desc "Convert a template"
+        desc "Replace template variables"
+
+        usage <<-USAGE
+        Replace variables in a file:
+
+              kubekick template -f path/to/file.yaml image=alpine:3.6
+
+            Or, pipe the file to STDIN:
+
+              cat path/to/file.yaml | kubekick template -f - image=alpine:3.6
+
+            You can also specify your values in a config file:
+
+              kubekick template -f path/to/file.json --from values.yaml
+        USAGE
 
         option "-f FILE", "--filename FILE",
           type: String,
@@ -39,13 +53,13 @@ module Kubekick
       sub_command "run" do
         desc "Run a one-off task in a bare pod"
         usage <<-USAGE
-        Run a YAML file:
+        Run a YAML/JSON file:
 
               kubekick run -f path/to/file.yaml
 
-            Alternatively, you can pipe the YAML in:
+            Alternatively, you can pipe the file in:
 
-              cat path/to/file.yaml | kubectl run -f -
+              cat path/to/file.json | kubekick run -f -
         USAGE
 
         option "-f FILE", "--filename FILE",
