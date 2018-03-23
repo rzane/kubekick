@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export KUBEKICK_DEBUG=true
+exec crystal run `dirname $0`/../src/kubekick/cli.cr -- "$@"
