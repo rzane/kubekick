@@ -16,8 +16,10 @@ module Kubekick
         loop do
           pod = kubectl.get_pod(definition.name)
           print_pod_status(pod)
-          sleep 1
+          sleep 3
         end
+      rescue err : Kubectl::Error
+        abort err.message
       end
 
       private def print_pod_status(pod)
