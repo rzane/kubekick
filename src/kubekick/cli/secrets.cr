@@ -39,7 +39,7 @@ module Kubekick
 
       private def read_ejson_file
         if filename == "-"
-          ARGF.gets_to_end
+          STDIN.gets_to_end
         else
           File.read(filename)
         end

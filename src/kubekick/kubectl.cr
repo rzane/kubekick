@@ -6,7 +6,6 @@ require "./kubectl/definition"
 module Kubekick
   class Kubectl
     CMD = "kubectl"
-    INHERIT = Process::Redirect::Inherit
 
     class Error < Exception
     end
