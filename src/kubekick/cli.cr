@@ -102,4 +102,3 @@ end
 
 require "./cli/run"
 require "./cli/secrets"
-Kubekick::CLI.start(ARGV)

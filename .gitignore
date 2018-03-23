@@ -1,4 +1,6 @@
 /doc/
 /lib/
 /bin/kubekick
+/bin/kubekick.dwarf
 /.shards/
+/*.a

@@ -6,7 +6,7 @@ authors:
 
 targets:
   kubekick:
-    main: src/kubekick/cli.cr
+    main: src/kubekick.cr
 
 dependencies:
   cox:
