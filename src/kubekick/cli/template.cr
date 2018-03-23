@@ -7,11 +7,11 @@ module Kubekick
     class Template
       include Helpers
 
-      getter! filename : String
+      getter! filenames : Array(String)
       getter! parameters : Array(String)
       getter! from : Array(String)
 
-      def initialize(@filename, @parameters, @from)
+      def initialize(@filenames, @parameters, @from)
       end
 
       def run
@@ -28,9 +28,25 @@ module Kubekick
           values[key] = value
         end
 
-        template = read_template(filename)
-        template = Crustache.parse(template)
-        say Crustache.render(template, values)
+        render(values)
+      end
+
+      def render(values)
+        collect_files.each do |file|
+          template = read_template(file)
+          template = Crustache.parse(template)
+          say Crustache.render(template, values)
+        end
+      end
+
+      def collect_files
+        filenames.flat_map do |path|
+          if File.directory?(path)
+            Dir.glob(File.join(path, "*.{yml,yaml,json}"))
+          else
+            [path]
+          end
+        end
       end
     end
   end

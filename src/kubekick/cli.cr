@@ -30,8 +30,8 @@ module Kubekick
         USAGE
 
         option "-f FILE", "--filename FILE",
-          type: String,
-          desc: "Template file",
+          type: Array(String),
+          desc: "Template files",
           required: true
 
         option "--from FILE",
@@ -41,7 +41,7 @@ module Kubekick
 
         run do |options, arguments|
           cmd = CLI::Template.new(
-            filename: options.filename.not_nil!,
+            filenames: options.filename.not_nil!,
             from: options.from,
             parameters: arguments
           )
@@ -132,7 +132,7 @@ module Kubekick
             )
           )
 
-          exit cmd.run
+          exit cmd.run.not_nil!
         end
       end
     end
