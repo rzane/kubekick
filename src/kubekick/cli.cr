@@ -7,7 +7,7 @@ module Kubekick
     main_command do
       desc "A sidekick for Kubernetes deployments"
       usage "kubekick [command] [arguments]"
-      version Kubekick::VERSION
+      version Kubekick.version_string
       run do |options, _arguments|
         puts options.help
       end
