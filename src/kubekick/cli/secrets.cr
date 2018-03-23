@@ -17,18 +17,14 @@ module Kubekick
         secret_key = load_ejson_secret(ejson)
         secret_file = SecretFile.decrypt(ejson, secret_key)
 
-        secret_file.render_each do |name, yaml|
-          if secret_exists?(name)
-            kubectl.apply(yaml)
-            puts %(secret "#{name}" updated)
-          else
-            kubectl.apply(yaml)
-            puts %(secret "#{name}" created)
-          end
+        secret_file.secrets.each do |name|
+          puts kubectl.apply(name, secret_file.yaml_for(name))
         end
+      rescue err : Kubectl::Error
+        abort err.message
       end
 
-      private def secret_exists?(name)
+      private def secrets_exist?(name)
         kubectl.get_secrets(name)
         true
       rescue Kubectl::Error

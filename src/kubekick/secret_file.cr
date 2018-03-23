@@ -1,4 +1,5 @@
 require "yaml"
+require "base64"
 require "./ejson"
 
 module Kubekick
@@ -21,7 +22,7 @@ module Kubekick
       data = {} of String => String
 
       spec["data"].each do |key, value|
-        data[key.as_s.sub(/^_/, "")] = value.as_s
+        data[key.as_s.sub(/^_/, "")] = Base64.strict_encode(value.as_s)
       end
 
       data

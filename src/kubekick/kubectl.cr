@@ -1,3 +1,4 @@
+require "tempfile"
 require "./kubectl/pod"
 require "./kubectl/secret"
 require "./kubectl/definition"
@@ -17,49 +18,53 @@ module Kubekick
       @flags << "--kubeconfig" << kubeconfig unless kubeconfig.nil?
     end
 
-    def apply(template : String)
-      run_template("create", template)
+    def create(name : String, template : String)
+      with_tempfile(name, template) do |path|
+        run!(["create", "-f", path])
+      end
     end
 
-    def create(template : String)
-      run_template("apply", template)
+    def apply(name : String, template : String)
+      with_tempfile(name, template) do |path|
+        run!(["apply", "-f", path])
+      end
     end
 
     def get_pod(name : String)
-      status, output, error = run(["get", "pod", name, "-o", "yaml"])
-
-      if status.success?
-        Pod.new(output.to_s)
-      else
-        raise Error.new(error.to_s)
-      end
+      Pod.new run!(["get", "pod", name, "-o", "yaml"])
     end
 
     def delete_pod(name : String)
-      status, _, error = run(["delete", "pod", name])
-      raise Error.new(error.to_s) unless status.success?
+      run!(["delete", "pod", name])
     end
 
     def get_secrets(name : String)
-      status, output, error = run(["get", "secret", name, "-o", "yaml"])
-
-      if status.success?
-        Secret.new(output.to_s)
-      else
-        raise Error.new(error.to_s)
-      end
+      Secret.new run!(["get", "secret", name, "-o", "yaml"])
     end
 
-    private def run(args)
+    private def with_tempfile(name, contents)
+      file = Tempfile.new(name)
+      file.print(contents)
+      file.close
+      yield file.path
+    ensure
+      file.unlink unless file.nil?
+    end
+
+    private def run!(args)
       output = IO::Memory.new
       error = IO::Memory.new
-      status = Process.run(CMD, @flags + args, output: output, error: error)
-      {status, output, error}
-    end
+      status = Process.run(
+        CMD,
+        @flags + args,
+        output: output,
+        error: error
+      )
 
-    private def run_template(action, template)
-      Process.run(CMD, @flags + [action, "-f", "-"]) do |process|
-        process.input.puts(template)
+      if status.success?
+        output.to_s
+      else
+        raise Error.new(error.to_s)
       end
     end
   end
