@@ -1,4 +1,6 @@
 /doc/
 /lib/
-/bin/
 /.shards/
+
+/bin/*
+!/bin/kubekick-dev
