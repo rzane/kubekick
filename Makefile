@@ -1,23 +1,33 @@
-VERSION=$(shell cat VERSION)
-SOURCES=$(wildcard src/*.cr src/**/*.cr)
-DOWNLOAD=https://github.com/rzane/kubekick/archive/v$(VERSION).zip
-SHA256=$(shell openssl sha256 < archive.zip)
+VERSION := $(shell cat VERSION)
+OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
+ARCH := $(shell uname -m)
 
-all: bin/kubekick
+ifeq ($(OS),linux)
+	CRFLAGS := --link-flags "-static -L/opt/crystal/embedded/lib"
+endif
 
-bin/kubekick: $(SOURCES)
-	mkdir -p bin
+ifeq ($(OS),darwin)
+	CRFLAGS := --link-flags "-L$(PWD)/.static"
+	PREBUILD := copy-libraries
+endif
+
+all: deps build
+
+copy-libraries:
+	rm -rf .static
+	mkdir .static
+	cp /usr/local/lib/libyaml.a .static
+	cp /usr/local/lib/libsodium.a .static
+	cp /usr/local/lib/libpcre.a .static
+	cp /usr/local/lib/libevent.a .static
+	cp /usr/local/lib/libgc.a .static
+
+deps:
 	crystal deps --production
-	crystal build -o bin/kubekick src/kubekick.cr --release
 
-release.tag:
-	git tag v$(VERSION)
-	git push --tags
+test:
+	crystal spec
 
-release.brew:
-	wget -q -O archive.zip $(DOWNLOAD)
-	perl -pe 's|url ".*"|url "$(DOWNLOAD)"|g' -i kubekick.rb
-	perl -pe 's|sha256 ".*"|sha256 "$(SHA256)"|g' -i kubekick.rb
-	rm -rf archive.zip
-
-release: release.tag release.brew
+release: $(PREBUILD)
+	crystal build --release -o bin/kubekick src/kubekick.cr $(CRFLAGS)
+	tar zcvf kubekick-$(VERSION)_$(OS)_$(ARCH).tar.gz bin/kubekick

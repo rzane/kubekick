@@ -1,6 +1,9 @@
 /doc/
 /lib/
 /.shards/
+/.static/
 
 /bin/*
 !/bin/kubekick-dev
+
+/kubekick-*.tar.gz
