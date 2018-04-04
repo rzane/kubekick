@@ -1,11 +1,10 @@
-require "minitest/autorun"
-require "../../../src/kubekick/cli/run"
+require "../../spec_helper"
 
 describe Kubekick::CLI::Run do
   include Kubekick
 
   let :filename do
-    "examples/task.yaml"
+    fixture_file("task.yaml").as String
   end
 
   let :kubectl do

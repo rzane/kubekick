@@ -1,5 +1,4 @@
-require "minitest/autorun"
-require "../../../src/kubekick/kubectl/pod"
+require "../../spec_helper"
 
 describe Kubekick::Kubectl::Pod do
   include Kubekick

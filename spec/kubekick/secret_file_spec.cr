@@ -1,15 +1,16 @@
-require "minitest/autorun"
-require "../../../src/kubekick/secret_file"
+require "../spec_helper"
 
 describe Kubekick::SecretFile do
   include Kubekick
 
   let :private_key do
-    File.read_lines("examples/secrets/private.key").last.strip.as(String)
+    file = fixture_file("secrets/private.key")
+    lines = File.read_lines(file)
+    lines.last.strip.as(String)
   end
 
   let :data do
-    File.read("examples/secrets/secrets.ejson")
+    File.read fixture_file("secrets/secrets.ejson")
   end
 
   let :file do

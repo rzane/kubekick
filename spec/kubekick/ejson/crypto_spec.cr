@@ -1,5 +1,4 @@
-require "minitest/autorun"
-require "../../../src/kubekick/ejson/crypto"
+require "../../spec_helper"
 
 describe Kubekick::EJSON::Crypto do
   include Kubekick::EJSON

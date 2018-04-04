@@ -1,5 +1,4 @@
-require "minitest/autorun"
-require "../../../src/kubekick/kubectl/definition"
+require "../../spec_helper"
 
 describe Kubekick::Kubectl::Definition do
   include Kubekick
