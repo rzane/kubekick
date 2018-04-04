@@ -27,4 +27,4 @@ deps:
 
 build: $(PREBUILD)
 	crystal build --release -o bin/kubekick src/kubekick.cr $(CRFLAGS)
-	gzip -c bin/kubekick > kubekick-$(VERSION)_$(OS)_$(ARCH).gz
+	tar zcvf kubekick-$(VERSION)_$(OS)_$(ARCH).tar.gz bin/kubekick
