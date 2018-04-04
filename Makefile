@@ -25,6 +25,9 @@ copy-libraries:
 deps:
 	crystal deps --production
 
-build: $(PREBUILD)
+test:
+	crystal spec
+
+release: $(PREBUILD)
 	crystal build --release -o bin/kubekick src/kubekick.cr $(CRFLAGS)
 	tar zcvf kubekick-$(VERSION)_$(OS)_$(ARCH).tar.gz bin/kubekick
