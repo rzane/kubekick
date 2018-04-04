@@ -5,3 +5,5 @@
 
 /bin/*
 !/bin/kubekick-dev
+
+/kubekick-*.tar.gz
