@@ -20,7 +20,7 @@ copy-libraries:
 	cp /usr/local/lib/libsodium.a .static
 	cp /usr/local/lib/libpcre.a .static
 	cp /usr/local/lib/libevent.a .static
-	cp /usr/local/opt/bdw-gc/lib/libgc.a .static
+	cp /usr/local/lib/libgc.a .static
 
 deps:
 	crystal deps --production
