@@ -29,4 +29,4 @@ deploy:
   on:
     repo: rzane/kubekick
     branch: master
-    # tags: true
+    tags: true
