@@ -40,13 +40,11 @@ module Kubekick
           default: [] of String
 
         run do |options, arguments|
-          cmd = CLI::Template.new(
+          CLI::Template.new(
             filenames: options.filename.not_nil!,
             from: options.from,
             parameters: arguments
-          )
-
-          cmd.run
+          ).run
         end
       end
 
@@ -80,16 +78,14 @@ module Kubekick
           desc: "Path to the kubeconfig file"
 
         run do |options, arguments|
-          cmd = CLI::Run.new(
+          CLI::Run.new(
             filename: options.filename.not_nil!,
             kubectl: Kubectl.new(
               context: options.context,
               namespace: options.namespace,
               kubeconfig: options.kubeconfig
             )
-          )
-
-          cmd.run
+          ).run
         end
       end
 
@@ -123,16 +119,14 @@ module Kubekick
           desc: "Path to the kubeconfig file"
 
         run do |options, arguments|
-          cmd = CLI::Secrets.new(
+          CLI::Secrets.new(
             filename: options.filename.not_nil!,
             kubectl: Kubectl.new(
               context: options.context,
               namespace: options.namespace,
               kubeconfig: options.kubeconfig
             )
-          )
-
-          exit cmd.run.not_nil!
+          ).run
         end
       end
     end
