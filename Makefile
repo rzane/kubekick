@@ -1,6 +1,7 @@
 VERSION := $(shell cat VERSION)
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell uname -m)
+ARCHIVE := kubekick-$(VERSION)_$(OS)_$(ARCH).tar.gz
 
 ifeq ($(OS),linux)
 	CRFLAGS := --static
@@ -8,12 +9,12 @@ endif
 
 ifeq ($(OS),darwin)
 	CRFLAGS := --link-flags "-L$(PWD)/.static"
-	PREBUILD := copy-libraries
+	PREBUILD := darwin-copy-static
 endif
 
-all: deps build
+all: deps release
 
-copy-libraries:
+darwin-copy-static:
 	rm -rf .static
 	mkdir .static
 	cp /usr/local/lib/libyaml.a .static
