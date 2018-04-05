@@ -1,5 +1,9 @@
 language: crystal
 
+os:
+  - linux
+  - osx
+
 addons:
   apt:
     sources:
