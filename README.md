@@ -23,7 +23,7 @@ If you're on macOS, you can install `kubekick` with Homebrew:
     $ brew tap rzane/kubekick
     $ brew install kubekick
 
-Alternatively, you can install a pre-built binary from the [releases page](/releases).
+Alternatively, you can install a pre-built binary from the [releases page](https://github.com/rzane/kubekick/releases).
 
 ## Usage
 
