@@ -30,4 +30,4 @@ test:
 
 release: $(PREBUILD)
 	crystal build --release -o bin/kubekick src/kubekick.cr $(CRFLAGS)
-	tar zcvf kubekick-$(VERSION)_$(OS)_$(ARCH).tar.gz bin/kubekick
+	tar zcvf $(ARCHIVE) bin/kubekick

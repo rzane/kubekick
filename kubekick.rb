@@ -1,19 +1,17 @@
 class Kubekick < Formula
   desc "One-off tasks and encrypted secrets CLI for Kubernetes"
-  homepage "https://gitlab.com/rzane/kubekick"
-  url "https://github.com/rzane/kubekick/archive/v0.1.0.zip"
-  sha256 "507df4504b350ee141c1b3085b42de37219ecc584c1bc8b9ae717543de7cf2f0"
-  head "https://gitlab.com/rzane/kubekick.git"
+  homepage "https://github.com/rzane/kubekick"
 
-  depends_on "crystal-lang" => :build
-  depends_on "libsodium"
+  version "0.1.0"
+  url "https://github.com/rzane/kubekick/releases/download/v0.1.0/kubekick-0.1.0_darwin_x86_64.tar.gz"
+  sha256 "8561e63fd77b062756029cd893515791ea07fc14c0de025edd051834f5adaf15"
 
   def install
-    system "make"
-    bin.install "bin/kubekick"
+    bin.install "kubekick"
   end
 
   test do
-    system "#{bin}/kubekick", "--version"
+    cmd = "echo '{{check}}' | #{bin}/kubekick template -f - check=pass"
+    assert_equal "pass", shell_output(cmd).chomp
   end
 end
