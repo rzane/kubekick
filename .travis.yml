@@ -11,6 +11,10 @@ addons:
     packages:
     - libsodium-dev
 
+before_script:
+  - "if [ ${TRAVIS_OS_NAME} = 'osx' ]; then brew update; fi"
+  - "if [ ${TRAVIS_OS_NAME} = 'osx' ]; then brew install libsodium; fi"
+
 script:
   - make test
   - make release
