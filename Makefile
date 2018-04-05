@@ -3,7 +3,7 @@ OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell uname -m)
 
 ifeq ($(OS),linux)
-	CRFLAGS := --link-flags "-static -L/opt/crystal/embedded/lib"
+	CRFLAGS := --static
 endif
 
 ifeq ($(OS),darwin)
@@ -29,5 +29,5 @@ test:
 	crystal spec
 
 release: $(PREBUILD)
-	crystal build --release -o bin/kubekick src/kubekick.cr $(CRFLAGS)
+	crystal build -o bin/kubekick src/kubekick.cr --release $(CRFLAGS)
 	tar zcvf $(ARCHIVE) bin/kubekick

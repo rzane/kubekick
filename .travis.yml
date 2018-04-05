@@ -25,6 +25,7 @@ deploy:
     secure: M6BdMEFTjbHDp3XbteyFp74nnvJPfjsRzgOSE3BcJBEWAla65ySudfsf/60Y8T9J5pv9oBarmVvPM5+NLpGEuXXXYiXlJcTv0WiUGL0gSunemoFi2wHb/3MXQ1LrUccuYkbgBopvNpQMvZQubbbNbYAbWS/bmMhY21CbHDmv4h1zfsT/MCw436nL/vVSzJdvPD1tMX3UYuB+nAD6ST0BxRBOiMoIYamESn3knmhxVx23uat3SMp1wE8xrE8+VhwQHqJHoosbRK9UIwDv2pQWW7D7RQEcvgwywcQM2vrXmEXdl5OZz8KXYxPOjfz63hTTo/K460L7Zs8lzxr7EOXTv7t2edbZy8NGK4VFt2ACgX0gsNiACzQx5hVaWq0VZHk22nNkSohd1L4/fXouReRfn7JQglcgw/SPPR/PwOn+9/E2/ir+2l/uHhN88IrsR7jXpyFizXlQUp4MvYrqXOTjaa0Ybs+LOhGwSSM6mUJWss/CAR4CnLAE/7ruSOiPtgtz0Y56wdRtXwdn07jtNDudVpEBqTcwY1evrR5Q05V2FxvwyZKfW4sXrha7olIdrSz+84Z2fU3xupcZOnMuQgM6n9RO3IUT+jfbgWHP2dj/acsxSL6MwPard9D4JgbfYQcjaaFFiGLxThiDKbuV5mR8k4teEBRmYEtvUZ4laqcSX+w=
   file_glob: true
   file: kubekick-*.tar.gz
+  overwrite: true
   skip_cleanup: true
   on:
     repo: rzane/kubekick
