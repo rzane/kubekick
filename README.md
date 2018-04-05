@@ -18,12 +18,12 @@ It would be really nice if this was part of Kubernetes, but it isn't. So, Kubeki
 
 Kubekick expects you to have `kubectl` installed.
 
-Then, you can install `kubekick` with Homebrew:
+If you're on macOS, you can install `kubekick` with Homebrew:
 
     $ brew tap rzane/kubekick
     $ brew install kubekick
 
-If you're on Linux, you'll have to [build from source](#building-from-source).
+Alternatively, you can install a pre-built binary from the [releases page](/releases).
 
 ## Usage
 
@@ -114,13 +114,6 @@ This feature is particularly useful when combined with other commands:
 
     $ kubekick template -f path/to/file.yaml image=alpine:3.6 | kubekick run -f -
 
-## Building from source
-
-1. Install [Crystal](https://crystal-lang.org/docs/installation/).
-2. Install [libsodium](https://download.libsodium.org/doc/installation/).
-3. Run `make`
-4. Copy `bin/kubekick` to the install directory for your platform.
-
 ## Developing
 
 Install requirements:
@@ -133,18 +126,18 @@ Run tests:
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create a new Pull Request
+1.  Fork it
+2.  Create your feature branch (git checkout -b my-new-feature)
+3.  Commit your changes (git commit -am 'Add some feature')
+4.  Push to the branch (git push origin my-new-feature)
+5.  Create a new Pull Request
 
 ## Tribute
 
 Kubekick is pretty much a blatant ripoff of [kubernetes-deploy](https://github.com/Shopify/kubernetes-deploy). If you find yourself needing a more fully featured tool, you should use it.
 
-I build Kubekick because:
+I built Kubekick because:
 
-1. I thought it would be nice to have pre-compiled binaries (coming soon).
-2. I wanted to use Crystal.
-3. I felt that `kubernetes-deploy` was doing more than I needed.
+1.  I thought it would be nice to have pre-compiled binaries.
+2.  I wanted to use Crystal.
+3.  I felt that `kubernetes-deploy` was doing more than I needed.
