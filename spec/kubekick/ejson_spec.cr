@@ -2,7 +2,7 @@ require "../spec_helper"
 
 describe Kubekick::EJSON do
   include Kubekick
-  
+
   let :box do
     EJSON::Crypto.encrypt("foobar", PUBLIC_KEY, PRIVATE_KEY)
   end
@@ -48,8 +48,10 @@ describe Kubekick::EJSON do
   end
 
   it "raises when public key is missing" do
-    assert_raises EJSON::PublicKeyError do
+    error = assert_raises EJSON::PublicKeyError do
       EJSON.public_key(%({}))
     end
+
+    error.message.must_match(/EJSON files must have a key '_public_key' at the top level./)
   end
 end

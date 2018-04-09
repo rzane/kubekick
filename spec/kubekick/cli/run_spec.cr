@@ -38,9 +38,11 @@ describe Kubekick::CLI::Run do
   it "runs a failed pod" do
     kubectl._pod_phases = ["Pending", "Running", "Failed"]
 
-    assert_raises CLI::Run::Error do
+    error = assert_raises CLI::Run::Error do
       cli.run
     end
+
+    error.message.must_equal "aborting"
 
     lines = cli.output.to_s.split("\n")
     lines.shift.must_match(/pod "example-.*" pending/)
@@ -54,9 +56,11 @@ describe Kubekick::CLI::Run do
   it "runs an unknown pod" do
     kubectl._pod_phases = ["Pending", "Running", "Unknown"]
 
-    assert_raises CLI::Run::Error do
+    error = assert_raises CLI::Run::Error do
       cli.run
     end
+
+    error.message.must_equal "aborting"
 
     lines = cli.output.to_s.split("\n")
     lines.shift.must_match(/pod "example-.*" pending/)

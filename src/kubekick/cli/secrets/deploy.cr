@@ -17,7 +17,7 @@ module Kubekick
 
         def run
           assert_secret_exists!
-          
+
           ejson = read_template(filename)
           public_key = EJSON.public_key(ejson)
           secret_key = retrieve_secret_key(public_key)

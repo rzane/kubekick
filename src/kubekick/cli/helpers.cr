@@ -25,6 +25,8 @@ module Kubekick
       def retrieve_secret_key(public_key)
         secrets = kubectl.get_secrets(SECRET_NAME)
         secrets.value_of(public_key)
+      rescue KeyError
+        raise SecretError.new("expected to find a value for '#{public_key}' in secret '#{SECRET_NAME}', but none was found")
       end
 
       def output_secrets(data)
