@@ -3,16 +3,10 @@ require "../spec_helper"
 describe Kubekick::SecretFile do
   include Kubekick
 
-  let :private_key do
-    file = fixture_file("secrets/private.key")
-    lines = File.read_lines(file)
-    lines.last.strip.as(String)
-  end
-
   let :data do
-    file = fixture_file("secrets/secrets.ejson")
+    file = fixture_file("secrets.ejson")
     contents = File.read(file)
-    EJSON.decrypt(contents, private_key)
+    EJSON.decrypt(contents, PRIVATE_KEY)
   end
 
   let :file do

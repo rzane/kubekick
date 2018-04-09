@@ -2,17 +2,9 @@ require "../spec_helper"
 
 describe Kubekick::EJSON do
   include Kubekick
-
-  let :public do
-    "870c8b7867009b93652549c4144cd425bd03043a36e207cce13411d260385732"
-  end
-
-  let :secret do
-    "1d59c0892d42cd5959dd6b8e8b04f1a0061a4c4901e075bad291c109aeac1688"
-  end
-
+  
   let :box do
-    EJSON::Crypto.encrypt("foobar", public, secret)
+    EJSON::Crypto.encrypt("foobar", PUBLIC_KEY, PRIVATE_KEY)
   end
 
   let :shallow do
@@ -32,22 +24,22 @@ describe Kubekick::EJSON do
   end
 
   it "can decrypt shallow properties" do
-    result = EJSON.decrypt(shallow, secret)
+    result = EJSON.decrypt(shallow, PRIVATE_KEY)
     result["example"].as_s.must_equal("foobar")
   end
 
   it "can decrypt deep properties" do
-    result = EJSON.decrypt(deep, secret)
+    result = EJSON.decrypt(deep, PRIVATE_KEY)
     result["deep"][0]["example"].as_s.must_equal("foobar")
   end
 
   it "can decrypt arrays" do
-    result = EJSON.decrypt(array, secret)
+    result = EJSON.decrypt(array, PRIVATE_KEY)
     result[0]["example"].as_s.must_equal("foobar")
   end
 
   it "ignores underscores" do
-    result = EJSON.decrypt(ignored, secret)
+    result = EJSON.decrypt(ignored, PRIVATE_KEY)
     result["_example"].as_s.must_equal(box)
   end
 
