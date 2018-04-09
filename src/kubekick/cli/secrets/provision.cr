@@ -26,8 +26,8 @@ module Kubekick
             value: secret_key
           )
 
-          say "public key:  #{keypair.public.bytes.hexstring}"
-          say "secret key:  #{keypair.secret.bytes.hexstring}"
+          say "public key:  #{public_key}"
+          say "secret key:  #{secret_key}"
         end
       end
     end
