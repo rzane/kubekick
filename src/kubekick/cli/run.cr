@@ -4,6 +4,9 @@ require "./helpers"
 module Kubekick
   class CLI
     class Run
+      class Error < Exception
+      end
+
       include Helpers
 
       getter! kubectl : Kubectl
@@ -14,7 +17,7 @@ module Kubekick
       def initialize(@filename, @kubectl)
       end
 
-      def run : Int32
+      def run
         template = read_template(filename)
         definition = Kubectl::Definition.new(template)
         kubectl.create(definition.name, definition.dump)
@@ -26,9 +29,10 @@ module Kubekick
           case pod.phase
           when .succeeded?
             kubectl.delete_pod(pod.name)
-            break 0
+            say %(pod "#{pod.name}" deleted)
+            break
           when .failed?, .unknown?
-            break 1
+            raise Error.new("aborting")
           end
 
           sleep delay_duration

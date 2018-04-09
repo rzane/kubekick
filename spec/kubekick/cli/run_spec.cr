@@ -22,16 +22,13 @@ describe Kubekick::CLI::Run do
 
   it "runs a successful pod" do
     kubectl._pod_phases = ["Pending", "Running", "Succeeded"]
-
-    cli.output = IO::Memory.new
-    cli.delay_duration = 0
-
-    cli.run.must_equal 0
+    cli.run
 
     lines = cli.output.to_s.split("\n")
     lines.shift.must_match(/pod "example-.*" pending/)
     lines.shift.must_match(/pod "example-.*" running/)
     lines.shift.must_match(/pod "example-.*" succeeded/)
+    lines.shift.must_match(/pod "example-.*" deleted/)
 
     kubectl._pod_created.must_match(/example-.*/)
     kubectl._pod_deleted.must_match(/example-.*/)
@@ -41,7 +38,9 @@ describe Kubekick::CLI::Run do
   it "runs a failed pod" do
     kubectl._pod_phases = ["Pending", "Running", "Failed"]
 
-    cli.run.must_equal 1
+    assert_raises CLI::Run::Error do
+      cli.run
+    end
 
     lines = cli.output.to_s.split("\n")
     lines.shift.must_match(/pod "example-.*" pending/)
@@ -55,7 +54,9 @@ describe Kubekick::CLI::Run do
   it "runs an unknown pod" do
     kubectl._pod_phases = ["Pending", "Running", "Unknown"]
 
-    cli.run.must_equal 1
+    assert_raises CLI::Run::Error do
+      cli.run
+    end
 
     lines = cli.output.to_s.split("\n")
     lines.shift.must_match(/pod "example-.*" pending/)
