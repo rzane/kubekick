@@ -71,8 +71,6 @@ module Kubekick
       end
 
       sub_command "run" do
-        CLI.kubernetes_command
-
         desc "Run a one-off task in a bare pod"
         usage <<-USAGE
         Run a YAML/JSON file:
@@ -83,6 +81,8 @@ module Kubekick
 
               cat path/to/file.json | kubekick run -f -
         USAGE
+
+        CLI.kubernetes_command
 
         option "-f FILE", "--filename FILE",
           type: String,
@@ -105,9 +105,9 @@ module Kubekick
         end
 
         sub_command "provision" do
-          CLI.kubernetes_command
-
           desc "Generate a keypair and store the private key in Kubernetes"
+
+          CLI.kubernetes_command
 
           run do |options, _arguments|
             CLI::Secrets::Provision.new(kubectl: CLI.kubectl(options)).run
@@ -115,6 +115,8 @@ module Kubekick
         end
 
         sub_command "encrypt" do
+          desc "Encrypt the values in a given file using the keypair stored in Kubernetes."
+
           CLI.kubernetes_command
 
           option "-f FILE", "--filename FILE",
@@ -137,6 +139,8 @@ module Kubekick
         end
 
         sub_command "decrypt" do
+          desc "Decrypt the values in a given file using the keypair stored in Kubernetes."
+
           CLI.kubernetes_command
 
           option "-f FILE", "--filename FILE",
