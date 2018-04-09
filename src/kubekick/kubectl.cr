@@ -37,6 +37,10 @@ module Kubekick
       run!(["delete", "pod", name])
     end
 
+    def create_secret(name : String, key : String, value : String)
+      run!(["create", "secret", "generic", name, "--from-literal=#{key}=#{value}"])
+    end
+
     def get_secrets(name : String)
       Secret.new run!(["get", "secret", name, "-o", "yaml"])
     end

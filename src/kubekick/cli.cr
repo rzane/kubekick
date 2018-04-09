@@ -4,6 +4,28 @@ require "./version"
 
 module Kubekick
   class CLI < Clim
+    macro kubernetes_command
+      option "-n NAMESPACE", "--namespace NAMESPACE",
+        type: String,
+        desc: "The namespace scope"
+
+      option "--context CONTEXT",
+        type: String,
+        desc: "The name of the kubeconfig context"
+
+      option "--kubeconfig KUBECONFIG",
+        type: String,
+        desc: "Path to the kubeconfig file"
+    end
+
+    def self.kubectl(options)
+      Kubectl.new(
+        context: options.context,
+        namespace: options.namespace,
+        kubeconfig: options.kubeconfig
+      )
+    end
+
     main_command do
       desc "A sidekick for Kubernetes deployments"
       usage "kubekick [command] [arguments]"
@@ -49,6 +71,8 @@ module Kubekick
       end
 
       sub_command "run" do
+        CLI.kubernetes_command
+
         desc "Run a one-off task in a bare pod"
         usage <<-USAGE
         Run a YAML/JSON file:
@@ -65,68 +89,100 @@ module Kubekick
           desc: "Filename to use to create the resource",
           required: true
 
-        option "-n NAMESPACE", "--namespace NAMESPACE",
-          type: String,
-          desc: "The namespace scope"
-
-        option "--context CONTEXT",
-          type: String,
-          desc: "The name of the kubeconfig context"
-
-        option "--kubeconfig KUBECONFIG",
-          type: String,
-          desc: "Path to the kubeconfig file"
-
         run do |options, arguments|
           CLI::Run.new(
             filename: options.filename.not_nil!,
-            kubectl: Kubectl.new(
-              context: options.context,
-              namespace: options.namespace,
-              kubeconfig: options.kubeconfig
-            )
+            kubectl: CLI.kubectl(options)
           ).run
         end
       end
 
       sub_command "secrets" do
-        desc "Synchronize a secrets file with Kubernetes"
-        usage <<-USAGE
-        Load a JSON file:
+        desc "Manage Kubernetes secrets"
+        usage "kubekick secrets [command] [arguments]"
+        run do |options, _arguments|
+          puts options.help
+        end
 
-              kubekick secrets -f path/to/file.json
+        sub_command "provision" do
+          CLI.kubernetes_command
 
-            Alternatively, you can pipe the JSON in:
+          desc "Generate a keypair and store the private key in Kubernetes"
 
-              cat path/to/secrets.json | kubekick secrets -f -
-        USAGE
+          run do |options, _arguments|
+            CLI::Secrets::Provision.new(kubectl: CLI.kubectl(options)).run
+          end
+        end
 
-        option "-f FILE", "--filename FILE",
-          type: String,
-          desc: "Filename containing secrets",
-          required: true
+        sub_command "encrypt" do
+          CLI.kubernetes_command
 
-        option "-n NAMESPACE", "--namespace NAMESPACE",
-          type: String,
-          desc: "The namespace scope"
+          option "-f FILE", "--filename FILE",
+            type: String,
+            desc: "Filename to use to create the resource",
+            required: true
 
-        option "--context CONTEXT",
-          type: String,
-          desc: "The name of the kubeconfig context"
+          option "--replace",
+            type: Bool,
+            desc: "Edit the file inline",
+            default: false
 
-        option "--kubeconfig KUBECONFIG",
-          type: String,
-          desc: "Path to the kubeconfig file"
+          run do |options, _arguments|
+            CLI::Secrets::Encrypt.new(
+              filename: options.filename.not_nil!,
+              replace: options.replace,
+              kubectl: CLI.kubectl(options)
+            ).run
+          end
+        end
 
-        run do |options, arguments|
-          CLI::Secrets.new(
-            filename: options.filename.not_nil!,
-            kubectl: Kubectl.new(
-              context: options.context,
-              namespace: options.namespace,
-              kubeconfig: options.kubeconfig
-            )
-          ).run
+        sub_command "decrypt" do
+          CLI.kubernetes_command
+
+          option "-f FILE", "--filename FILE",
+            type: String,
+            desc: "Filename to use to create the resource",
+            required: true
+
+          option "--replace",
+            type: Bool,
+            desc: "Replace the contents of the file",
+            default: false
+
+          run do |options, _arguments|
+            CLI::Secrets::Decrypt.new(
+              filename: options.filename.not_nil!,
+              replace: options.replace,
+              kubectl: CLI.kubectl(options)
+            ).run
+          end
+        end
+
+        sub_command "deploy" do
+          CLI.kubernetes_command
+
+          desc "Synchronize a secrets file with Kubernetes"
+          usage <<-USAGE
+          Load a JSON file:
+
+                kubekick secrets -f path/to/file.json
+
+              Alternatively, you can pipe the JSON in:
+
+                cat path/to/secrets.json | kubekick secrets -f -
+          USAGE
+
+          option "-f FILE", "--filename FILE",
+            type: String,
+            desc: "Filename to use to create the resource",
+            required: true
+
+          run do |options, arguments|
+            CLI::Secrets::Deploy.new(
+              filename: options.filename.not_nil!,
+              kubectl: CLI.kubectl(options)
+            ).run
+          end
         end
       end
     end
@@ -134,5 +190,8 @@ module Kubekick
 end
 
 require "./cli/run"
-require "./cli/secrets"
+require "./cli/secrets/provision"
+require "./cli/secrets/encrypt"
+require "./cli/secrets/decrypt"
+require "./cli/secrets/deploy"
 require "./cli/template"

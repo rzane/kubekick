@@ -7,11 +7,29 @@ module Kubekick
     class StructureError < Exception
     end
 
-    def self.decrypt(data, secret)
+    def self.encrypt(data, public_key, secret_key)
+      decrypted = JSON.parse_raw(data)
+
+      encrypted = Walk.walk(decrypted) do |value|
+        if Crypto.encrypted?(value)
+          value
+        else
+          Crypto.encrypt(value, public_key, secret_key)
+        end
+      end
+
+      JSON::Any.new(encrypted)
+    end
+
+    def self.decrypt(data, secret_key)
       encrypted = JSON.parse_raw(data)
 
       decrypted = Walk.walk(encrypted) do |value|
-        Crypto.decrypt(value, secret)
+        if Crypto.encrypted?(value)
+          Crypto.decrypt(value, secret_key)
+        else
+          value
+        end
       end
 
       JSON::Any.new(decrypted)

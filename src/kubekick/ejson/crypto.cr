@@ -9,6 +9,10 @@ module Kubekick
       class InvalidBoxError < Exception
       end
 
+      def self.encrypted?(value)
+        !!(value =~ PATTERN)
+      end
+
       def self.encrypt(message, public, secret)
         nonce, enc = Cox.encrypt(
           message,

@@ -10,7 +10,15 @@ module Kubekick
       new EJSON.decrypt(data, secret_key)
     end
 
+    def self.encrypt(data : String, public_key : String, secret_key : String)
+      new EJSON.encrypt(data, public_key, secret_key)
+    end
+
     def initialize(@data : JSON::Any)
+    end
+
+    def to_pretty_json
+      @data.to_pretty_json
     end
 
     def secrets
