@@ -10,11 +10,13 @@ describe Kubekick::SecretFile do
   end
 
   let :data do
-    File.read fixture_file("secrets/secrets.ejson")
+    file = fixture_file("secrets/secrets.ejson")
+    contents = File.read(file)
+    EJSON.decrypt(contents, private_key)
   end
 
   let :file do
-    SecretFile.decrypt(data, private_key)
+    SecretFile.new(data)
   end
 
   it "generates a secret" do
