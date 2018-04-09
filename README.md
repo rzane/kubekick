@@ -60,15 +60,14 @@ Here's the output you'd see:
 
 ### Secrets
 
-Install [EJSON](https://github.com/Shopify/ejson), then generate a keypair:
+First, you need to generate a keypair. Running this command will store the keypair as a secret in your Kubernetes cluster.
 
-    $ ejson keygen
+    $ kubekick secrets provision
+    secret "ejson-keys" created
+    public key:  2fbd6f1978d14fcc9df3a463e0718a22f0023ae8aaaa0be5c28118c99e31ec64
+    secret key:  e600285996f56db39a858e3f49a4f785b1c4ad7db455f935f822b02f226574e0
 
-Create a Kubernetes secret in your target namespace with the new keypair:
-
-    $ kubectl create secret generic ejson-keys --from-literal=YOUR_PUBLIC_KEY=YOUR_PRIVATE_KEY --namespace=TARGET_NAMESPACE
-
-Create a `secrets.ejson` file:
+Next, create a file named `secrets.ejson`:
 
 ```json
 {
@@ -86,13 +85,13 @@ Create a `secrets.ejson` file:
 
 Encrypt the values:
 
-    $ ejson encrypt path/to/secrets.ejson
+    $ kubekick secrets encrypt -f path/to/secrets.ejson
 
 Now you can deploy them:
 
-    $ kubekick secrets -f path/to/secrets.ejson
+    $ kubekick secrets deploy -f path/to/secrets.ejson
 
-You can safely commit the `secrets.ejson` file. You might also want to consider saving your keypair somewhere.
+You can safely commit the `secrets.ejson` file. You might also want to consider backing up your keypair somewhere.
 
 ### Templating
 

@@ -17,18 +17,17 @@ module Kubekick
           refute_secret_exists!
 
           keypair = Cox::KeyPair.new
-          public_key = Base64.strict_encode(keypair.public.bytes)
-          secret_key = Base64.strict_encode(keypair.secret.bytes)
+          public_key = keypair.public.bytes.hexstring
+          secret_key = keypair.secret.bytes.hexstring
 
-          kubectl.create_secret(
+          say kubectl.create_secret(
             name: SECRET_NAME,
             key: public_key,
             value: secret_key
           )
 
-          say "created '#{SECRET_NAME}'"
-          say "public key:  #{public_key}"
-          say "secret key:  #{secret_key}"
+          say "public key:  #{keypair.public.bytes.hexstring}"
+          say "secret key:  #{keypair.secret.bytes.hexstring}"
         end
       end
     end
