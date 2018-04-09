@@ -33,8 +33,6 @@ module Kubekick
 
           sleep delay_duration
         end
-      rescue err : Kubectl::Error
-        abort err.message
       end
     end
   end

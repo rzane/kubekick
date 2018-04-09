@@ -6,6 +6,6 @@ rescue ex
   if ENV["KUBEKICK_DEBUG"]?
     raise ex
   else
-    STDERR.puts ex.message
+    abort ex.message
   end
 end

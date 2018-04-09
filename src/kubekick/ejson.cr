@@ -37,7 +37,7 @@ module Kubekick
 
     def self.public_key(data)
       encrypted = JSON.parse(data)
-      encrypted["_public_key"].as_s
+      key = encrypted["_public_key"].as_s
     end
   end
 end

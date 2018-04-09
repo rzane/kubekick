@@ -45,6 +45,13 @@ module Kubekick
       Secret.new run!(["get", "secret", name, "-o", "yaml"])
     end
 
+    def secret_exists?(name)
+      get_secrets(name)
+      true
+    rescue Kubectl::Error
+      false
+    end
+
     private def with_tempfile(name, contents)
       file = Tempfile.new(name)
       file.print(contents)
