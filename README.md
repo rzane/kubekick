@@ -85,7 +85,7 @@ Next, create a file named `secrets.ejson`:
 
 Encrypt the values:
 
-    $ kubekick secrets encrypt -f path/to/secrets.ejson
+    $ kubekick secrets encrypt --replace -f path/to/secrets.ejson
 
 Now you can deploy them:
 
