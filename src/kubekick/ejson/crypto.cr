@@ -22,9 +22,9 @@ module Kubekick
 
         parts = [
           "1",
-          Base64.encode(public.hexbytes).rstrip,
-          Base64.encode(nonce.bytes).rstrip,
-          Base64.encode(enc).rstrip
+          Base64.strict_encode(public.hexbytes),
+          Base64.strict_encode(nonce.bytes),
+          Base64.strict_encode(enc)
         ]
 
         %(EJ[#{parts.join(":")}])
