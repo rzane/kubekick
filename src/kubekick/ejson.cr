@@ -7,6 +7,9 @@ module Kubekick
     class StructureError < Exception
     end
 
+    class PublicKeyError < Exception
+    end
+
     def self.encrypt(data, public_key, secret_key)
       decrypted = JSON.parse_raw(data)
 
@@ -37,7 +40,9 @@ module Kubekick
 
     def self.public_key(data)
       encrypted = JSON.parse(data)
-      key = encrypted["_public_key"].as_s
+      encrypted["_public_key"].as_s
+    rescue KeyError
+      raise PublicKeyError.new("EJSON files must have a key '_public_key' at the top level.")
     end
   end
 end

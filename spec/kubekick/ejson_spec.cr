@@ -50,4 +50,14 @@ describe Kubekick::EJSON do
     result = EJSON.decrypt(ignored, secret)
     result["_example"].as_s.must_equal(box)
   end
+
+  it "gets the public key" do
+    EJSON.public_key(%({"_public_key": "123"})).must_equal "123"
+  end
+
+  it "raises when public key is missing" do
+    assert_raises EJSON::PublicKeyError do
+      EJSON.public_key(%({}))
+    end
+  end
 end
